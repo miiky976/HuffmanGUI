@@ -4,8 +4,7 @@ from tkinter import filedialog as fd
 from tkinter.messagebox import showinfo
 import tkinter as tk
 import huffman
-
-datos = [['l', ' ', 'm', 'o', 'a', 'e', 'H', 'i', 'g', 'u'], [4, 3, 3, 2, 2, 2, 1, 1, 1, 1], ['01', '110', '101', '100', '1111', '1110', '0001', '0000', '0011', '0010']]
+import math
 
 def select_file():
 	filetypes = (
@@ -24,6 +23,21 @@ def select_file():
 	writes = huffman.write(content, datos)
 	entryfileout.delete('1.0', tk.END)
 	entryfileout.insert('1.0', writes)
+	total = len(content)
+	before = len(content)*8
+	after = len(writes)
+	mean = 0
+	sum = 0
+	for i in datos[2]:
+		sum += len(i)
+	mean = sum/len(datos[2])
+	entropy = 0
+	for i in datos[1]:
+		entropy += (i/len(content))*(math.log(1/(i/len(content))) / math.log(2))
+	perc = 100-((after*100)/before)
+	informacion = "Total de caracteres: "+str(total)+"\nBits antes: "+str(before)+"\nBits con Huffman: "+str(after)+"\nPromedio: "+str(mean)+"\nEntropia: "+str(entropy)+"\nPorcentaje de compactacion: "+str(perc)+"."
+	lblinfile.delete('1.0', tk.END)
+	lblinfile.insert('1.0', informacion)
 	for item in treef.get_children():
 		treef.delete(item)
 	for i in range(len(datos[0])):
@@ -37,6 +51,21 @@ def get_data():
 	datos = huffman.join_sort(text, msg)
 	writes = huffman.write(text, datos)
 	entry_output.insert(0, writes)
+	total = len(text)
+	before = len(text)*8
+	after = len(writes)
+	mean = 0
+	sum = 0
+	for i in datos[2]:
+		sum += len(i)
+	mean = sum/len(datos[2])
+	entropy = 0
+	for i in datos[1]:
+		entropy += (i/len(text))*(math.log(1/(i/len(text))) / math.log(2))
+	perc = 100-((after*100)/before)
+	informacion = "Total de caracteres: "+str(total)+"\nBits antes: "+str(before)+"\nBits con Huffman: "+str(after)+"\nPromedio: "+str(mean)+"\nEntropia: "+str(entropy)+"\nPorcentaje de compactacion: "+str(perc)+"."
+	lblinfo.delete('1.0', tk.END)
+	lblinfo.insert('1.0', informacion)
 	for item in tree.get_children():
 		tree.delete(item)
 	for i in range(len(datos[0])):
@@ -91,6 +120,9 @@ treef.heading("Codigo",text="Binario",anchor='center')
 
 treef.pack()
 
+lblinfile = tk.Text(frameFile)
+lblinfile.pack()
+
 # Frame de entrada de mensaje con texto
 frameEntry = ttk.Frame(fr_text)
 frameEntry.pack(fill="both", expand=True, padx=10)
@@ -118,5 +150,8 @@ tree.heading("Repeticion",text="Repeticion",anchor='center')
 tree.heading("Codigo",text="Binario",anchor='center')
 
 tree.pack(fill='y')
+
+lblinfo = tk.Text(frameEntry)
+lblinfo.pack()
 
 root.mainloop()

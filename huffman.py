@@ -27,9 +27,10 @@ def huffman(data):
 		x = x[:-2]
 		x.append(res)
 		x.sort(reverse=True)
-		for i in range(len(x)):
-			if (res == x[i] and res != x[(i+1)%len(x)]):
-				info.append(i)
+		# for i in range(len(x)):
+		# 	if (res == x[i] and res != x[(i+1)%len(x)]):
+		# 		info.append(i)
+		info.append(len(x) - 1 - x[::-1].index(res))
 	return x, info
 
 def decode_huffman(data, info):
@@ -41,5 +42,27 @@ def decode_huffman(data, info):
 		msg.append(item+"0")
 	return msg
 
-data, info = huffman("Hola me llamo miguel")
-print(decode_huffman(data, info))
+def join_sort(data, msg):
+	tar = chort(frequency(data))
+	tar.append(msg)
+	return tar
+
+def write(data, msg):
+	final = ""
+	split = list(data)
+	for i in split:
+		counter = 0
+		for j in msg[0]:
+			if (i == j):
+				if (counter == len(msg[0])):
+					break
+				final += msg[2][counter]
+			counter += 1
+	return final
+
+# chain = "Hola me llamo miguel Angel ramos ruiz"
+# data, info = huffman(chain)
+# msg = decode_huffman(data, info)
+# join = join_sort(chain, msg)
+# writes = write(chain, join)
+# print(join)
